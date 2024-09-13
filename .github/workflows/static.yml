@@ -1,52 +1,26 @@
-name: Deploy static content to Pages
+name: Deploy to GitHub Pages
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
+    branches:
+      - main  # 你想要触发部署的分支
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
+    - name: Checkout the repository
+      uses: actions/checkout@v2
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v2
       with:
-        node-version: '20'
-
+        node-version: '20'  # 选择合适的 Node.js 版本
     - name: Install pnpm
       run: npm install -g pnpm
-
     - name: Install dependencies
       run: cd frontend && pnpm install --no-frozen-lockfile
-
     - name: Build project
       run: cd frontend && pnpm run build
-
-    - name: Setup Pages
-      uses: actions/configure-pages@v5
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        path: 'frontend/dist'
-
     - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./frontend/dist  # 构建输出目录，根据你的项目调整
