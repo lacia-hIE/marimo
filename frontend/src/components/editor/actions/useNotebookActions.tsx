@@ -1,4 +1,4 @@
-/* Copyright 2024 Marimo. All rights reserved. */
+import { useTranslation } from 'react-i18next';
 import {
   kioskModeAtom,
   runDuringPresentMode,
@@ -71,6 +71,7 @@ const NOOP_HANDLER = (event?: Event) => {
 };
 
 export function useNotebookActions() {
+  const { t } = useTranslation();
   const [filename] = useFilename();
   const { openModal, closeModal } = useImperativeModal();
   const { openApplication } = useChromeActions();
@@ -100,26 +101,26 @@ export function useNotebookActions() {
   const actions: ActionButton[] = [
     {
       icon: <Share2Icon size={14} strokeWidth={1.5} />,
-      label: "Share",
+      label: t('Share'),
       handle: NOOP_HANDLER,
       dropdown: [
         {
           icon: <GlobeIcon size={14} strokeWidth={1.5} />,
-          label: "Publish HTML to web",
+          label: t('Publish HTML to web'),
           handle: async () => {
             openModal(<ShareStaticNotebookModal onClose={closeModal} />);
           },
         },
         {
           icon: <LinkIcon size={14} strokeWidth={1.5} />,
-          label: "Create WebAssembly link",
+          label: t('Create WebAssembly link'),
           handle: async () => {
             const code = await readCode();
             const url = createShareableLink({ code: code.contents });
             window.navigator.clipboard.writeText(url);
             toast({
-              title: "Copied",
-              description: "Link copied to clipboard.",
+              title: t('Copied'),
+              description: t('Link copied to clipboard.'),
             });
           },
         },
@@ -127,18 +128,18 @@ export function useNotebookActions() {
     },
     {
       icon: <DownloadIcon size={14} strokeWidth={1.5} />,
-      label: "Download",
+      label: t('Download'),
       handle: NOOP_HANDLER,
       dropdown: [
         {
           icon: <FolderDownIcon size={14} strokeWidth={1.5} />,
-          label: "Download as HTML",
+          label: t('Download as HTML'),
           handle: async () => {
             if (!filename) {
               toast({
                 variant: "danger",
-                title: "Error",
-                description: "Notebooks must be named to be exported.",
+                title: t('Error'),
+                description: t('Notebooks must be named to be exported.'),
               });
               return;
             }
@@ -147,11 +148,11 @@ export function useNotebookActions() {
         },
         {
           icon: <ImageIcon size={14} strokeWidth={1.5} />,
-          label: "Download as PNG",
+          label: t('Download as PNG'),
           handle: async () => {
             const toasted = toast({
-              title: "Starting download",
-              description: "Downloading as PNG...",
+              title: t('Starting download'),
+              description: t('Downloading as PNG...'),
             });
 
             await runDuringPresentMode(async () => {
@@ -171,11 +172,11 @@ export function useNotebookActions() {
         },
         {
           icon: <FileIcon size={14} strokeWidth={1.5} />,
-          label: "Download PDF",
+          label: t('Download PDF'),
           handle: async () => {
             const toasted = toast({
-              title: "Starting download",
-              description: "Downloading as PDF...",
+              title: t('Starting download'),
+              description: t('Downloading as PDF...'),
             });
 
             await runDuringPresentMode(async () => {
@@ -198,7 +199,7 @@ export function useNotebookActions() {
           icon: (
             <MarkdownIcon strokeWidth={1.5} style={{ width: 14, height: 14 }} />
           ),
-          label: "Download as Markdown",
+          label: t('Download as Markdown'),
           handle: async () => {
             const md = await exportAsMarkdown({ download: false });
             downloadBlob(
@@ -209,7 +210,7 @@ export function useNotebookActions() {
         },
         {
           icon: <CodeIcon size={14} strokeWidth={1.5} />,
-          label: "Download Python code",
+          label: t('Download Python code'),
           handle: async () => {
             const code = await readCode();
             downloadBlob(
@@ -224,7 +225,7 @@ export function useNotebookActions() {
     {
       divider: true,
       icon: <PanelLeftIcon size={14} strokeWidth={1.5} />,
-      label: "Helper panel",
+      label: t('Helper panel'),
       handle: NOOP_HANDLER,
       dropdown: PANELS.flatMap(({ type, Icon, hidden }) => {
         if (hidden) {
@@ -241,7 +242,7 @@ export function useNotebookActions() {
 
     {
       icon: <PresentationIcon size={14} strokeWidth={1.5} />,
-      label: "Present as",
+      label: t('Present as'),
       handle: NOOP_HANDLER,
       dropdown: [
         {
@@ -251,7 +252,7 @@ export function useNotebookActions() {
             ) : (
               <LayoutTemplateIcon size={14} strokeWidth={1.5} />
             ),
-          label: "Toggle app view",
+          label: t('Toggle app view'),
           hotkey: "global.hideCode",
           handle: () => {
             togglePresenting();
@@ -282,26 +283,26 @@ export function useNotebookActions() {
 
     {
       icon: <Files size={14} strokeWidth={1.5} />,
-      label: "Create notebook copy",
+      label: t('Create notebook copy'),
       hidden: !filename || isWasm(),
       handle: copyNotebook,
     },
     {
       icon: <ClipboardCopyIcon size={14} strokeWidth={1.5} />,
-      label: "Copy code to clipboard",
+      label: t('Copy code to clipboard'),
       hidden: !filename,
       handle: async () => {
         const code = await readCode();
         navigator.clipboard.writeText(code.contents);
         toast({
-          title: "Copied",
-          description: "Code copied to clipboard.",
+          title: t('Copied'),
+          description: t('Code copied to clipboard.'),
         });
       },
     },
     {
       icon: <ZapIcon size={14} strokeWidth={1.5} />,
-      label: "Enable all cells",
+      label: t('Enable all cells'),
       hidden: disabledCells.length === 0 || kioskMode,
       handle: async () => {
         const ids = disabledCells.map((cell) => cell.id);
@@ -318,7 +319,7 @@ export function useNotebookActions() {
     },
     {
       icon: <ZapOffIcon size={14} strokeWidth={1.5} />,
-      label: "Disable all cells",
+      label: t('Disable all cells'),
       hidden: enabledCells.length === 0 || kioskMode,
       handle: async () => {
         const ids = enabledCells.map((cell) => cell.id);
@@ -335,7 +336,7 @@ export function useNotebookActions() {
     },
     {
       icon: <Undo2Icon size={14} strokeWidth={1.5} />,
-      label: "Undo cell deletion",
+      label: t('Undo cell deletion'),
       hidden: !canUndoDeletes(notebook) || kioskMode,
       handle: () => {
         undoDeleteCell();
@@ -345,21 +346,21 @@ export function useNotebookActions() {
     {
       divider: true,
       icon: <CommandIcon size={14} strokeWidth={1.5} />,
-      label: "Command palette",
+      label: t('Command palette'),
       hotkey: "global.commandPalette",
       handle: () => setCommandPaletteOpen((open) => !open),
     },
 
     {
       icon: <KeyboardIcon size={14} strokeWidth={1.5} />,
-      label: "Keyboard shortcuts",
+      label: t('Keyboard shortcuts'),
       hotkey: "global.showHelp",
       handle: () => setKeyboardShortcutsOpen((open) => !open),
     },
 
     {
       icon: <BookMarkedIcon size={14} strokeWidth={1.5} />,
-      label: "Open documentation",
+      label: t('Open documentation'),
       handle: () => {
         window.open("https://docs.marimo.io", "_blank");
       },
@@ -368,7 +369,7 @@ export function useNotebookActions() {
     {
       divider: true,
       icon: <Home size={14} strokeWidth={1.5} />,
-      label: "Return home",
+      label: t('Return home'),
       hidden: !location.search.includes("file"),
       handle: () => {
         window.location.href = document.baseURI;
@@ -377,7 +378,7 @@ export function useNotebookActions() {
 
     {
       icon: <PowerSquareIcon size={14} strokeWidth={1.5} />,
-      label: "Restart kernel",
+      label: t('Restart kernel'),
       variant: "danger",
       handle: restartKernel,
     },

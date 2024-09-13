@@ -1,4 +1,4 @@
-/* Copyright 2024 Marimo. All rights reserved. */
+// src/main.tsx
 import ReactDOM from "react-dom/client";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import { ErrorBoundary } from "./components/editor/boundary/ErrorBoundary";
@@ -12,6 +12,7 @@ import { isStaticNotebook } from "./core/static/static-state";
 import { vegaLoader } from "./plugins/impl/vega/loader";
 import { initializePlugins } from "./plugins/plugins";
 import { cleanupAuthQueryParams } from "./core/network/auth";
+import './i18n'; // 引入 i18n 配置
 
 maybeRegisterVSCodeBindings();
 initializePlugins();
