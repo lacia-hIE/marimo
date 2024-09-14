@@ -1,4 +1,5 @@
-/* Copyright 2024 Marimo. All rights reserved. */
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -27,6 +28,7 @@ import { arrayToggle } from "@/utils/arrays";
 import { Kbd } from "../ui/kbd";
 
 export const AppConfigForm: React.FC = () => {
+  const { t } = useTranslation();
   const [config, setConfig] = useAppConfig();
 
   // Create form
@@ -57,9 +59,9 @@ export const AppConfigForm: React.FC = () => {
         className="flex flex-col gap-4"
       >
         <div>
-          <SettingTitle>Application Config</SettingTitle>
+          <SettingTitle>{t('appConfig')}</SettingTitle>
           <SettingDescription>
-            Settings applied to this notebook
+            {t('settingsApplied')}
           </SettingDescription>
         </div>
         <FormField
@@ -69,7 +71,7 @@ export const AppConfigForm: React.FC = () => {
             <FormItem
               className={"flex flex-row items-center space-x-1 space-y-0"}
             >
-              <FormLabel>Width</FormLabel>
+              <FormLabel>{t('width')}</FormLabel>
               <FormControl>
                 <NativeSelect
                   data-testid="app-width-select"
@@ -95,7 +97,7 @@ export const AppConfigForm: React.FC = () => {
           render={({ field }) => (
             <div className="flex flex-col gap-y-1">
               <FormItem className="flex flex-row items-center space-x-1 space-y-0">
-                <FormLabel>App title</FormLabel>
+                <FormLabel>{t('appTitle')}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -111,8 +113,7 @@ export const AppConfigForm: React.FC = () => {
                 <FormMessage />
               </FormItem>
               <FormDescription>
-                The application title is put in the title tag in the HTML code
-                and typically displayed in the title bar of the browser window.
+                {t('appTitleDescription')}
               </FormDescription>
             </div>
           )}
@@ -123,7 +124,7 @@ export const AppConfigForm: React.FC = () => {
           render={({ field }) => (
             <div className="flex flex-col gap-y-1">
               <FormItem className="flex flex-row items-center space-x-1 space-y-0">
-                <FormLabel className="flex-shrink-0">Custom CSS</FormLabel>
+                <FormLabel className="flex-shrink-0">{t('customCSS')}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -140,8 +141,7 @@ export const AppConfigForm: React.FC = () => {
                 <FormMessage />
               </FormItem>
               <FormDescription>
-                A filepath to a custom css file to be injected into the
-                notebook.
+                {t('customCSSDescription')}
               </FormDescription>
             </div>
           )}
@@ -163,33 +163,15 @@ export const AppConfigForm: React.FC = () => {
                         }}
                       />
                       <FormLabel htmlFor="html-checkbox">
-                        Auto-download HTML
+                        {t('autoDownloadHTML')}
                       </FormLabel>
                     </div>
-                    {/* Disable markdown until we save outputs in the exported markdown */}
-                    {/* <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="markdown-checkbox"
-                        checked={field.value.includes("markdown")}
-                        onCheckedChange={() => {
-                          field.onChange(arrayToggle(field.value, "markdown"));
-                        }}
-                      />
-                      <label
-                        htmlFor="markdown-checkbox"
-                        className="cursor-pointer"
-                      >
-                        Markdown
-                      </label>
-                    </div> */}
                   </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
               <FormDescription>
-                When enabled, marimo will periodically save this notebook as
-                HTML to a folder <Kbd className="inline">.marimo</Kbd> in the
-                notebook's directory.
+                {t('autoDownloadHTMLDescription')}
               </FormDescription>
             </div>
           )}

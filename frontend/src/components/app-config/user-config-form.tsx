@@ -32,6 +32,7 @@ import { useRef } from "react";
 import { useSetAtom } from "jotai";
 import { keyboardShortcutsAtom } from "../editor/controls/keyboard-shortcuts";
 import { Button } from "../ui/button";
+import { useTranslation } from 'react-i18next';
 
 const formItemClasses = "flex flex-row items-center space-x-1 space-y-0";
 
@@ -39,6 +40,11 @@ export const UserConfigForm: React.FC = () => {
   const [config, setConfig] = useUserConfig();
   const formElement = useRef<HTMLFormElement>(null);
   const setKeyboardShortcutsOpen = useSetAtom(keyboardShortcutsAtom);
+  const { t, i18n } = useTranslation();
+
+  const handleLanguageChange = (event) => {
+    i18n.changeLanguage(event.target.value);
+  };
 
   // Create form
   const form = useForm<UserConfig>({
@@ -63,14 +69,14 @@ export const UserConfigForm: React.FC = () => {
       return (
         <>
           <p className="text-sm text-muted-secondary">
-            To get a Codeium API key, follow{" "}
+            {t('aiAssist')}{" "}
             <a
               className="text-link hover:underline"
               href="https://docs.marimo.io/guides/editor_features/ai_completion.html#codeium-copilot"
               target="_blank"
               rel="noreferrer"
             >
-              these instructions
+              {t('aiCodeCompletion')}
             </a>
             .
           </p>
@@ -79,12 +85,12 @@ export const UserConfigForm: React.FC = () => {
             name="completion.codeium_api_key"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
-                <FormLabel>API Key</FormLabel>
+                <FormLabel>{t('apiKey')}</FormLabel>
                 <FormControl>
                   <Input
                     data-testid="codeium-api-key-input"
                     className="m-0 inline-flex"
-                    placeholder="key"
+                    placeholder={t('apiKey')}
                     {...field}
                     value={field.value || ""}
                   />
@@ -109,18 +115,18 @@ export const UserConfigForm: React.FC = () => {
         className="flex flex-col gap-5"
       >
         <div>
-          <SettingTitle>User Config</SettingTitle>
+          <SettingTitle>{t('userConfig')}</SettingTitle>
           <SettingDescription>
-            Settings applied to all marimo notebooks
+            {t('settingsAppliedToAllMarimoNotebooks')}
           </SettingDescription>
         </div>
-        <SettingGroup title="Editor">
+        <SettingGroup title={t('editor')}>
           <FormField
             control={form.control}
             name="save.autosave"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
-                <FormLabel className="font-normal">Autosave</FormLabel>
+                <FormLabel className="font-normal">{t('autosave')}</FormLabel>
                 <FormControl>
                   <Checkbox
                     data-testid="autosave-checkbox"
@@ -139,7 +145,7 @@ export const UserConfigForm: React.FC = () => {
             name="save.autosave_delay"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
-                <FormLabel>Autosave delay (seconds)</FormLabel>
+                <FormLabel>{t('autosaveDelaySeconds')}</FormLabel>
                 <FormControl>
                   <span className="inline-flex mr-2">
                     <NumberField
@@ -167,7 +173,7 @@ export const UserConfigForm: React.FC = () => {
             name="save.format_on_save"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
-                <FormLabel className="font-normal">Format on save</FormLabel>
+                <FormLabel className="font-normal">{t('formatOnSave')}</FormLabel>
                 <FormControl>
                   <Checkbox
                     data-testid="format-on-save-checkbox"
@@ -187,7 +193,7 @@ export const UserConfigForm: React.FC = () => {
             render={({ field }) => (
               <div className="flex flex-col space-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel>Line length</FormLabel>
+                  <FormLabel>{t('lineLength')}</FormLabel>
                   <FormControl>
                     <span className="inline-flex mr-2">
                       <NumberField
@@ -208,7 +214,7 @@ export const UserConfigForm: React.FC = () => {
                 </FormItem>
 
                 <FormDescription>
-                  Maximum line length when formatting code.
+                  {t('maximumLineLengthWhenFormattingCode')}
                 </FormDescription>
               </div>
             )}
@@ -219,7 +225,7 @@ export const UserConfigForm: React.FC = () => {
             render={({ field }) => (
               <div className="flex flex-col space-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel className="font-normal">Autocomplete</FormLabel>
+                  <FormLabel className="font-normal">{t('autocomplete')}</FormLabel>
                   <FormControl>
                     <Checkbox
                       data-testid="autocomplete-checkbox"
@@ -232,8 +238,7 @@ export const UserConfigForm: React.FC = () => {
                   </FormControl>
                 </FormItem>
                 <FormDescription>
-                  When unchecked, code completion is still available through a
-                  hotkey.
+                  {t('whenUncheckedCodeCompletionIsStillAvailableThroughAHotkey')}
                 </FormDescription>
               </div>
             )}
@@ -244,7 +249,7 @@ export const UserConfigForm: React.FC = () => {
             render={({ field }) => (
               <div className="flex flex-col space-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel>Keymap</FormLabel>
+                  <FormLabel>{t('keymap')}</FormLabel>
                   <FormControl>
                     <NativeSelect
                       data-testid="keymap-select"
@@ -275,21 +280,21 @@ export const UserConfigForm: React.FC = () => {
                       setKeyboardShortcutsOpen(true);
                     }}
                   >
-                    Edit Keyboard Shortcuts
+                    {t('editKeyboardShortcuts')}
                   </Button>
                 </div>
               </div>
             )}
           />
         </SettingGroup>
-        <SettingGroup title="Display">
+        <SettingGroup title={t('display')}>
           <FormField
             control={form.control}
             name="display.default_width"
             render={({ field }) => (
               <div className="flex flex-col space-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel>Default width</FormLabel>
+                  <FormLabel>{t('defaultWidth')}</FormLabel>
                   <FormControl>
                     <NativeSelect
                       data-testid="user-config-width-select"
@@ -309,8 +314,7 @@ export const UserConfigForm: React.FC = () => {
                 </FormItem>
 
                 <FormDescription>
-                  The default app width for new notebooks; overridden by "width"
-                  in the application config.
+                  {t('theDefaultAppWidthForNewNotebooks')}
                 </FormDescription>
               </div>
             )}
@@ -320,7 +324,7 @@ export const UserConfigForm: React.FC = () => {
             name="display.theme"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
-                <FormLabel>Theme</FormLabel>
+                <FormLabel>{t('theme')}</FormLabel>
                 <FormControl>
                   <NativeSelect
                     data-testid="theme-select"
@@ -346,7 +350,7 @@ export const UserConfigForm: React.FC = () => {
             render={({ field }) => (
               <div className="flex flex-col space-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel>Cell output area</FormLabel>
+                  <FormLabel>{t('cellOutputArea')}</FormLabel>
                   <FormControl>
                     <NativeSelect
                       data-testid="cell-output-select"
@@ -366,7 +370,7 @@ export const UserConfigForm: React.FC = () => {
                 </FormItem>
 
                 <FormDescription>
-                  Where to display cell's output.
+                  {t('whereToDisplayCellsOutput')}
                 </FormDescription>
               </div>
             )}
@@ -377,7 +381,7 @@ export const UserConfigForm: React.FC = () => {
             render={({ field }) => (
               <div className="flex flex-col space-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel>Dataframe viewer</FormLabel>
+                  <FormLabel>{t('dataframeViewer')}</FormLabel>
                   <FormControl>
                     <NativeSelect
                       data-testid="display-dataframes-select"
@@ -397,8 +401,7 @@ export const UserConfigForm: React.FC = () => {
                 </FormItem>
 
                 <FormDescription>
-                  Whether to use marimo's rich dataframe viewer or a plain HTML
-                  table; requires notebook restart to take effect.
+                  {t('whetherToUseMarimosRichDataframeViewer')}
                 </FormDescription>
               </div>
             )}
@@ -408,7 +411,7 @@ export const UserConfigForm: React.FC = () => {
             name="display.code_editor_font_size"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
-                <FormLabel>Code editor font size</FormLabel>
+                <FormLabel>{t('codeEditorFontSize')}</FormLabel>
                 <FormControl>
                   <span className="inline-flex mr-2">
                     <NumberField
@@ -431,14 +434,14 @@ export const UserConfigForm: React.FC = () => {
           />
         </SettingGroup>
 
-        <SettingGroup title="Package Management">
+        <SettingGroup title={t('packageManagement')}>
           <FormField
             control={form.control}
             disabled={isWasmRuntime}
             name="package_management.manager"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
-                <FormLabel>Manager</FormLabel>
+                <FormLabel>{t('manager')}</FormLabel>
                 <FormControl>
                   <NativeSelect
                     data-testid="package-manager-select"
@@ -459,14 +462,14 @@ export const UserConfigForm: React.FC = () => {
             )}
           />
         </SettingGroup>
-        <SettingGroup title="Runtime">
+        <SettingGroup title={t('runtime')}>
           <FormField
             control={form.control}
             name="runtime.auto_instantiate"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
                 <FormLabel className="font-normal">
-                  Autorun on startup
+                  {t('autorunOnStartup')}
                 </FormLabel>
                 <FormControl>
                   <Checkbox
@@ -485,7 +488,7 @@ export const UserConfigForm: React.FC = () => {
             render={({ field }) => (
               <div className="flex flex-col gap-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel className="font-normal">On cell change</FormLabel>
+                  <FormLabel className="font-normal">{t('onCellChange')}</FormLabel>
                   <FormControl>
                     <NativeSelect
                       data-testid="on-cell-change-select"
@@ -502,11 +505,7 @@ export const UserConfigForm: React.FC = () => {
                   </FormControl>
                 </FormItem>
                 <FormDescription>
-                  Whether marimo should automatically run cells or just mark
-                  them as stale. If "autorun", marimo will automatically run
-                  affected cells when a cell is run or a UI element is
-                  interacted with; if "lazy", marimo will mark affected cells as
-                  stale but won't re-run them.
+                  {t('onCellChangeDescription')}
                 </FormDescription>
               </div>
             )}
@@ -518,7 +517,7 @@ export const UserConfigForm: React.FC = () => {
               <div className="flex flex-col gap-y-1">
                 <FormItem className={formItemClasses}>
                   <FormLabel className="font-normal">
-                    On module change
+                    {t('onModuleChange')}
                   </FormLabel>
                   <FormControl>
                     <NativeSelect
@@ -537,28 +536,24 @@ export const UserConfigForm: React.FC = () => {
                   </FormControl>
                 </FormItem>
                 <FormDescription>
-                  Whether marimo should automatically reload modules before
-                  executing cells. If "lazy", marimo will mark cells affected by
-                  module modifications as stale; if "autorun", affected cells
-                  will be automatically re-run.
+                  {t('onModuleChangeDescription')}
                 </FormDescription>
               </div>
             )}
           />
         </SettingGroup>
-        <SettingGroup title="AI Assist">
+        <SettingGroup title={t('aiAssist')}>
           <p className="text-sm text-muted-secondary">
-            Add an API key to <Kbd className="inline">~/.marimo.toml</Kbd> to
-            activate marimo's AI assistant; see{" "}
+            {t('addApiKey')} <Kbd className="inline">~/.marimo.toml</Kbd> {t('toActivate')}
             <a
               className="text-link hover:underline"
               href="https://docs.marimo.io/guides/editor_features/ai_completion.html"
               target="_blank"
               rel="noreferrer"
             >
-              docs
+              {t('docs')}
             </a>{" "}
-            for more info.
+            {t('forMoreInfo')}
           </p>
           <FormField
             control={form.control}
@@ -566,7 +561,7 @@ export const UserConfigForm: React.FC = () => {
             name="ai.open_ai.base_url"
             render={({ field }) => (
               <FormItem className={formItemClasses}>
-                <FormLabel>Base URL</FormLabel>
+                <FormLabel>{t('baseUrl')}</FormLabel>
                 <FormControl>
                   <Input
                     data-testid="ai-base-url-input"
@@ -586,7 +581,7 @@ export const UserConfigForm: React.FC = () => {
             render={({ field }) => (
               <div className="flex flex-col space-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel>Model</FormLabel>
+                  <FormLabel>{t('model')}</FormLabel>
                   <FormControl>
                     <Input
                       data-testid="ai-model-input"
@@ -598,16 +593,15 @@ export const UserConfigForm: React.FC = () => {
                   <FormMessage />
                 </FormItem>
                 <FormDescription>
-                  If the model starts with "claude-", we will use your Anthropic
-                  API key. Otherwise, we will use your OpenAI API key.
+                  {t('modelDescription')}
                 </FormDescription>
               </div>
             )}
           />
         </SettingGroup>
-        <SettingGroup title="AI Code Completion">
+        <SettingGroup title={t('aiCodeCompletion')}>
           <p className="text-sm text-muted-secondary">
-            You may use GitHub Copilot or Codeium for AI code completion.
+            {t('aiCodeCompletionDescription')}
           </p>
 
           <FormField
@@ -616,7 +610,7 @@ export const UserConfigForm: React.FC = () => {
             render={({ field }) => (
               <div className="flex flex-col space-y-1">
                 <FormItem className={formItemClasses}>
-                  <FormLabel>Provider</FormLabel>
+                  <FormLabel>{t('provider')}</FormLabel>
                   <FormControl>
                     <NativeSelect
                       data-testid="copilot-select"
@@ -639,7 +633,7 @@ export const UserConfigForm: React.FC = () => {
                     >
                       {["none", "github", "codeium"].map((option) => (
                         <option value={option} key={option}>
-                          {option}
+                          {t(option)}
                         </option>
                       ))}
                     </NativeSelect>
@@ -651,6 +645,13 @@ export const UserConfigForm: React.FC = () => {
           />
 
           {renderCopilotProvider()}
+        </SettingGroup>
+        <SettingGroup title={t('languageSettings')}>
+          <FormLabel>{t('selectLanguage')}</FormLabel>
+          <NativeSelect onChange={handleLanguageChange} defaultValue={i18n.language}>
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+          </NativeSelect>
         </SettingGroup>
       </form>
     </Form>
